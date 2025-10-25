@@ -1,0 +1,11 @@
+[package]
+name = "wpe-sys"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[features]
+port_gtk = []
+port_wpe = []
+default = ["port_gtk"]
+

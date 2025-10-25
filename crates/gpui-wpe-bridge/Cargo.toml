@@ -1,0 +1,9 @@
+[package]
+name = "gpui-wpe-bridge"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+event-packet = { version = "0.0.0", path = "../event-packet" }
+

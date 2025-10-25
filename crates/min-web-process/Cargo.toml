@@ -1,0 +1,23 @@
+[package]
+name = "min-web-process"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+event-packet = { version = "0.0.0", path = "../event-packet", features = ["serde", "bincode"] }
+gdk-pixbuf = { version = "0.15", optional = true }
+gio = { version = "0.15", optional = true }
+glib = { version = "0.15", optional = true }
+gtk = { version = "0.15", optional = true }
+webkit2gtk = { version = "0.18", optional = true }
+
+[features]
+webkit2gtk = ["dep:webkit2gtk"]
+gtk = ["dep:gtk"]
+glib = ["dep:glib"]
+gdk-pixbuf = ["dep:gdk-pixbuf"]
+gio = ["dep:gio"]
+port_gtk = ["dep:webkit2gtk","dep:gtk","dep:glib","dep:gdk-pixbuf","dep:gio"]
+# wpe-sys will be used later when port is wired.
+

@@ -1,0 +1,13 @@
+[package]
+name = "gpui-app-host"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+event-packet = { version = "0.0.0", path = "../event-packet", features = ["serde", "bincode"] }
+pollster = "0.4.0"
+texture-verify = { version = "0.0.0", path = "../texture-verify" }
+wgpu = "27.0.1"
+winit = "0.30.12"
+

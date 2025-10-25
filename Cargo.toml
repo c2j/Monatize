@@ -1,0 +1,13 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/wpe-sys",
+    "crates/gpui-wpe-bridge",
+    "crates/min-web-process",
+    "crates/gpui-app-host",
+    "crates/event-packet",
+    "crates/mock-network",
+    "crates/texture-verify",
+    "xtask",
+]
+

@@ -1,0 +1,120 @@
+# Monazite repo .gitignore
+# Tailored for a Rust workspace, with GPUI/WebKit integration, Python scripts, and CI artifacts
+
+############################
+# Rust / Cargo
+############################
+# Build output
+/target/
+**/target/
+
+# Keep Cargo.lock for workspace/binaries (do NOT ignore)
+# !Cargo.lock
+
+############################
+# Build & Dist artifacts
+############################
+/dist/
+/build/
+/out/
+/bin/
+/obj/
+/WebKitBuild/
+/cmake-build-*/
+
+# Generated archives / installers
+*.tar.gz
+*.zip
+*.dmg
+*.AppImage
+*.rpm
+*.deb
+*.pkg
+*.msi
+*.exe
+
+############################
+# IDE / Editor
+############################
+.vscode/
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Editor swap/backup
+*.swp
+*.swo
+*~
+*.tmp
+*.bak
+*.old
+
+############################
+# OS files
+############################
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+############################
+# Logs & Reports
+############################
+*.log
+*.trace
+logs/
+reports/
+
+############################
+# Python (scripts/smoke-0.py etc.)
+############################
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+
+############################
+# Test/Coverage
+############################
+coverage/
+*.profraw
+*.profdata
+lcov.info
+
+############################
+# WASM (future use)
+############################
+pkg/
+wasm-pack.log
+
+############################
+# Node (if used in tooling)
+############################
+node_modules/
+npm-debug.log*
+yarn-error.log
+
+############################
+# Environment files
+############################
+.env
+.env.*
+!.env.example
+
+############################
+# Screenshots / Artifacts (optional)
+############################
+screenshots/
+
