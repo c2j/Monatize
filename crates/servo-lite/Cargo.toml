@@ -1,0 +1,11 @@
+[package]
+name = "servo-lite"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+message-defs = { path = "../message-defs" }
+thiserror = "2"
+
+[dev-dependencies]
+

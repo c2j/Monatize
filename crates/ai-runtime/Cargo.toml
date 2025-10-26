@@ -1,0 +1,22 @@
+[package]
+name = "ai-runtime"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "ai_runtime"
+path = "src/lib.rs"
+
+[[bin]]
+name = "ai-runtime"
+path = "src/main.rs"
+
+authors = []
+
+[dependencies]
+message-defs = { path = "../message-defs" }
+thiserror = "2"
+clap = { version = "4", features = ["derive"] }
+
+[dev-dependencies]
+

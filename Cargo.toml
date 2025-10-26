@@ -8,6 +8,17 @@ members = [
     "crates/event-packet",
     "crates/mock-network",
     "crates/texture-verify",
+    "crates/ipc-channel",
+    "crates/message-defs",
+    "crates/network-srv",
+    "crates/gpu-srv",
+    "crates/servo-lite",
+    "crates/dom-embed",
+    "crates/ai-runtime",
+    "crates/content-srv",
+    "crates/browser-main",
+    "crates/window-ai-api",
+
     "xtask",
 ]
 

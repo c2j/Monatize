@@ -1,0 +1,27 @@
+[package]
+name = "browser-main"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "browser"
+path = "src/main.rs"
+
+authors = []
+
+[dependencies]
+anyhow = "1"
+clap = { version = "4", features = ["derive"] }
+sha2 = "0.10"
+message-defs = { path = "../message-defs" }
+network-srv = { path = "../network-srv" }
+gpu-srv = { path = "../gpu-srv" }
+servo-lite = { path = "../servo-lite" }
+ai-runtime = { path = "../ai-runtime" }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "time"] }
+bytes = "1"
+gtk = "0.15"
+webkit2gtk = "0.18"
+glib = "0.15"
+gio = "0.15"
+

@@ -10,9 +10,9 @@
 | M2 | **message-defs** | IDL→Rust 代码生成 | `cargo test --lib` |
 | M3 | **network-srv** | 网络子进程 | `cargo run --bin network-srv -- --mock` |
 | M4 | **gpu-srv** | GPU 光栅化 & 合成 | `cargo run --bin gpu-srv -- --triangle` |
-| M5 | **content-srv** | 内容渲染进程 | `cargo run --bin content-srv -- --html <file>` |
+| M5 | **content-srv** | 内容渲染进程 | `cargo run --bin content-srv -- --url https://example.com --screenshot /tmp/page.png` |
 | M6 | **ai-runtime** | 端侧推理进程 | `cargo run --bin ai-runtime -- --bench` |
-| M7 | **browser-main** | 主控进程 | `cargo run --bin browser -- https://example.com` |
+| M7 | **browser-main** | 主控进程 | `cargo run --bin browser -- https://example.com --real-screenshot /tmp/page.png` |
 | M8 | **dom-embed** | 影子根注入库 | `cargo test --lib` |
 | M9 | **window-ai-api** | 前端 JS ↔ Rust 粘合 | `wasm-pack test --node` |
 | M10 | **servo-lite** | 极简布局引擎 | `cargo test --lib` |
@@ -94,7 +94,7 @@
 
 #### M12 smoke-test
 - **职责**：Python 脚本，零源码依赖， nightly 跑二进制 |
-| 主要 case | 输入 `https://example.com` → 断言摘要含 “Example” |
+| 主要 case | 输入 `https://example.com` → 断言摘要含 “Example Domain”，并生成有效 PNG 截图 |
 | 单测 | 自身用 `pytest`；Mock 子进程超时/崩溃路径 |
 | 外依 | `pytest`,`requests`(拉本地 health 探针) |
 
@@ -109,7 +109,7 @@
    – `content-srv`  
    – `ai-runtime`  
    – `browser`  
-3. 运行 `python ci/smoke.py` 10 s 内弹出（或 headless 生成）「Example Domain」摘要即阶段 1 通关。
+3. 运行 `python ci/smoke.py` 后 10 s 内输出包含 “Example Domain” 摘要，并生成有效 PNG 截图，即阶段 1 通关。
 
 ---
 

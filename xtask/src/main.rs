@@ -10,6 +10,9 @@ fn main() {
         }
         Some("dist-0") => dist_0(),
         Some("dist-gtk") => dist_gtk(),
+        Some("fmt-lint") => fmt_lint(),
+        Some("test") => test_all(),
+        Some("dist") => dist_p1(),
         Some("demo") => demo(),
         _ => print_usage(),
     }
@@ -21,7 +24,74 @@ fn print_usage() {
     println!("  cmake-gen     - generate build scaffolding (stub)");
     println!("  dist-0        - package default binaries (headless demo)");
     println!("  dist-gtk      - package with WebKitGTK-enabled min-web-process");
+    println!("  fmt-lint      - run cargo fmt + clippy over workspace");
+    println!("  test          - run cargo test --workspace");
+    println!("  dist          - package Phase-1 binaries (stub for now)");
     println!("  demo [mode]   - one-click demo under Xvfb; mode = headless (default) | gtk");
+}
+
+
+fn fmt_lint() {
+    let status_fmt = Command::new("cargo").args(["fmt", "--all"]).status().expect("run cargo fmt");
+    if !status_fmt.success() { std::process::exit(1); }
+    let status_clippy = Command::new("cargo")
+        .args(["clippy", "--workspace", "--all-targets", "-A", "clippy::all"]) // do not fail CI yet
+        .status()
+        .expect("run cargo clippy");
+    if !status_clippy.success() { eprintln!("xtask: clippy reported issues (non-fatal)"); }
+}
+
+fn test_all() {
+    let status = Command::new("cargo").args(["test", "--workspace"]).status().expect("run cargo test");
+    if !status.success() { std::process::exit(1); }
+}
+
+fn dist_p1() {
+    use std::fs;
+    use std::path::PathBuf;
+
+    // Build release binaries for Phase-1 processes
+    let status = Command::new("cargo")
+        .args([
+            "build", "--release",
+            "-p", "network-srv",
+            "-p", "gpu-srv",
+            "-p", "content-srv",
+            "-p", "ai-runtime",
+            "-p", "browser-main",
+        ])
+        .status()
+        .expect("failed to run cargo build --release");
+    if !status.success() {
+        eprintln!("xtask: cargo build --release failed");
+        std::process::exit(1);
+    }
+
+    let out_dir = PathBuf::from("dist/phase-1");
+    fs::create_dir_all(&out_dir).expect("mkdir dist/phase-1");
+
+    let net_bin = PathBuf::from("target/release/network-srv");
+    let gpu_bin = PathBuf::from("target/release/gpu-srv");
+    let content_bin = PathBuf::from("target/release/content-srv");
+    let ai_bin = PathBuf::from("target/release/ai-runtime");
+    let browser_bin = PathBuf::from("target/release/browser");
+
+    fs::copy(&net_bin, out_dir.join("network-srv")).expect("copy network-srv");
+    fs::copy(&gpu_bin, out_dir.join("gpu-srv")).expect("copy gpu-srv");
+    fs::copy(&content_bin, out_dir.join("content-srv")).expect("copy content-srv");
+    fs::copy(&ai_bin, out_dir.join("ai-runtime")).expect("copy ai-runtime");
+    fs::copy(&browser_bin, out_dir.join("browser")).expect("copy browser");
+
+    // Copy smoke script
+    let _ = fs::create_dir_all(&out_dir);
+    let _ = fs::copy("ci/smoke.py", out_dir.join("smoke.py"));
+
+    // Optional: write sha256 checksums if sha256sum is available
+    if check("sha256sum") {
+        let _ = Command::new("sh").arg("-c").arg("(cd dist/phase-1 && sha256sum * > SHA256SUMS)").status();
+    }
+
+    println!("xtask: dist (Phase-1) ready at {}/", out_dir.display());
 }
 
 fn check(cmd: &str) -> bool {

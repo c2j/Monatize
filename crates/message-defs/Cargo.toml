@@ -1,0 +1,17 @@
+[package]
+name = "message-defs"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+bytes = { version = "1", features = ["serde"] }
+bincode = "1"
+
+[build-dependencies]
+sha2 = "0.10"
+walkdir = "2"
+
+[dev-dependencies]
+sha2 = "0.10"
+

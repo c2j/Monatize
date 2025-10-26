@@ -1,0 +1,18 @@
+[package]
+name = "content-srv"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+message-defs = { path = "../message-defs" }
+servo-lite = { path = "../servo-lite" }
+clap = { version = "4", features = ["derive"] }
+anyhow = "1"
+gtk = "0.15"
+webkit2gtk = "0.18"
+gdk-pixbuf = "0.15"
+glib = "0.15"
+gio = "0.15"
+
+[dev-dependencies]
+

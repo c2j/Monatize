@@ -1,0 +1,11 @@
+[package]
+name = "gpu-srv"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+wgpu = "27.0.1"
+pollster = "0.4"
+anyhow = "1"
+clap = { version = "4", features = ["derive"] }
+

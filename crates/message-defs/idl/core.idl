@@ -1,0 +1,8 @@
+// Simple IDL for Phase-1 message types
+struct HttpRequest { url: String }
+struct HttpResponse { status: u16, headers: Vec<(String,String)>, body: Bytes }
+struct DrawCmd { Rect(x: u32, y: u32, w: u32, h: u32, rgba: u32) }
+struct DisplayList { items: Vec<DrawCmd> }
+struct AiRequest { prompt: String, max_tokens: u32 }
+struct AiResponse { text: String }
+
