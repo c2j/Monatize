@@ -13,6 +13,7 @@ fn main() {
         Some("fmt-lint") => fmt_lint(),
         Some("test") => test_all(),
         Some("dist") => dist_p1(),
+        Some("dist-2") => dist_2(),
         Some("demo") => demo(),
         _ => print_usage(),
     }
@@ -27,6 +28,7 @@ fn print_usage() {
     println!("  fmt-lint      - run cargo fmt + clippy over workspace");
     println!("  test          - run cargo test --workspace");
     println!("  dist          - package Phase-1 binaries (stub for now)");
+    println!("  dist-2        - package Phase-2 (initial stub: same as dist with extras)");
     println!("  demo [mode]   - one-click demo under Xvfb; mode = headless (default) | gtk");
 }
 
@@ -92,6 +94,52 @@ fn dist_p1() {
     }
 
     println!("xtask: dist (Phase-1) ready at {}/", out_dir.display());
+}
+
+fn dist_2() {
+    use std::fs;
+    use std::path::PathBuf;
+
+    // Build release binaries for Phase-2 (initial subset)
+    let status = Command::new("cargo")
+        .args([
+            "build", "--release",
+            "-p", "network-srv",
+            "-p", "gpu-srv",
+            "-p", "content-srv",
+            "-p", "ai-runtime",
+            "-p", "browser-main",
+            "-p", "update-service",
+            "-p", "crash-reporter",
+        ])
+        .status()
+        .expect("failed to run cargo build --release");
+    if !status.success() {
+        eprintln!("xtask: cargo build --release failed");
+        std::process::exit(1);
+    }
+
+    let out_dir = PathBuf::from("dist/phase-2");
+    fs::create_dir_all(&out_dir).expect("mkdir dist/phase-2");
+
+    for (src, dst) in [
+        ("target/release/network-srv", "network-srv"),
+        ("target/release/gpu-srv", "gpu-srv"),
+        ("target/release/content-srv", "content-srv"),
+        ("target/release/ai-runtime", "ai-runtime"),
+        ("target/release/browser", "browser"),
+        ("target/release/updater", "updater"),
+        ("target/release/crash-reporter", "crash-reporter"),
+    ] {
+        let _ = fs::copy(src, out_dir.join(dst));
+    }
+
+    // Drop in smoke-2 skeleton if present
+    if std::path::Path::new("ci/smoke-2.py").exists() {
+        let _ = fs::copy("ci/smoke-2.py", out_dir.join("smoke-2.py"));
+    }
+
+    println!("xtask: dist-2 (stub) ready at {}/", out_dir.display());
 }
 
 fn check(cmd: &str) -> bool {

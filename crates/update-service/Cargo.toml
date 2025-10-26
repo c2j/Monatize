@@ -1,0 +1,16 @@
+[package]
+name = "update-service"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "update_service"
+path = "src/lib.rs"
+
+[[bin]]
+name = "updater"
+path = "src/main.rs"
+
+[dependencies]
+# Keep stub crate std-only to avoid adding external deps right now
+

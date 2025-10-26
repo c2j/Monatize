@@ -18,6 +18,20 @@ members = [
     "crates/content-srv",
     "crates/browser-main",
     "crates/window-ai-api",
+    "crates/tab-manager",
+    "crates/site-isolation",
+    "crates/content-srv-factory",
+    "crates/gpu-compositor",
+
+    "crates/permission-manager",
+    "crates/pref-store",
+    "crates/download-manager",
+    "crates/print-manager",
+    "crates/extension-host",
+    "crates/extension-api",
+    "crates/user-script",
+    "crates/update-service",
+    "crates/crash-reporter",
 
     "xtask",
 ]

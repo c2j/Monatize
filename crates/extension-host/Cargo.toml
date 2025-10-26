@@ -1,0 +1,9 @@
+[package]
+name = "extension-host"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+extension-api = { version = "0.1.0", path = "../extension-api" }
+wasmi = "0.51.1"
+

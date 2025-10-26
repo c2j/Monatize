@@ -28,6 +28,10 @@ struct Args {
     #[arg(long)]
     show: bool,
 
+    /// Headless persistent mode (offscreen, keep running) (requires --url)
+    #[arg(long)]
+    headless_keepalive: bool,
+
     /// viewport width
     #[arg(long, default_value_t = 800)]
     width: u32,
@@ -39,11 +43,16 @@ struct Args {
 fn main() -> Result<()> {
     let args = Args::parse();
 
-    // Show a real WebKit window
+    // Real WebKit window or headless keepalive
     if let Some(url) = args.url.as_deref() {
         if args.show {
             show_url_window(url, args.width, args.height)?;
             println!("content-srv SHOW: url={}", url);
+            return Ok(());
+        }
+        if args.headless_keepalive {
+            headless_keepalive(url, args.width, args.height)?;
+            println!("content-srv HEADLESS: url={}", url);
             return Ok(());
         }
     }
@@ -63,7 +72,7 @@ fn main() -> Result<()> {
         return Ok(());
     }
 
-    Err(anyhow!("must provide either --url with --screenshot, or --url --show, or --html"))
+    Err(anyhow!("must provide either --url with --screenshot, or --url --show, or --url --headless-keepalive, or --html"))
 }
 
 fn render_url_to_png(url: &str, out_png: &str, width: u32, height: u32) -> Result<()> {
@@ -114,6 +123,38 @@ fn render_url_to_png(url: &str, out_png: &str, width: u32, height: u32) -> Resul
                 }
                 loop2.quit();
             });
+        }
+    });
+
+    webview.load_uri(url);
+    loop_.run();
+    Ok(())
+}
+
+fn headless_keepalive(url: &str, width: u32, height: u32) -> Result<()> {
+    // Require a GUI display environment (offscreen still needs a display server)
+    let has_display = std::env::var("DISPLAY").is_ok() || std::env::var("WAYLAND_DISPLAY").is_ok();
+    if !has_display {
+        return Err(anyhow!("No GUI display (DISPLAY/WAYLAND_DISPLAY not set). Use xvfb or --screenshot."));
+    }
+
+    gtk::init()?;
+
+    let off = gtk::OffscreenWindow::new();
+    off.set_default_size(width as i32, height as i32);
+
+    let webview = webkit2gtk::WebView::new();
+    off.add(&webview);
+    off.show_all();
+
+    let loop_ = glib::MainLoop::new(None, false);
+
+    // Inject a minimal marker after load finished
+    webview.connect_load_changed(move |wv, ev| {
+        use webkit2gtk::LoadEvent;
+        if ev == LoadEvent::Finished {
+            let js = r#"document.documentElement.setAttribute('data-monazite','1')"#;
+            let _ = wv.run_javascript(js, None::<&gio::Cancellable>, |_| {});
         }
     });
 

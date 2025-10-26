@@ -18,10 +18,23 @@ network-srv = { path = "../network-srv" }
 gpu-srv = { path = "../gpu-srv" }
 servo-lite = { path = "../servo-lite" }
 ai-runtime = { path = "../ai-runtime" }
+# Phase-2 new modules
+tab-manager = { path = "../tab-manager" }
+site-isolation = { path = "../site-isolation" }
+
+gpu-compositor = { path = "../gpu-compositor" }
+
+permission-manager = { path = "../permission-manager" }
+
+content-srv-factory = { path = "../content-srv-factory" }
+
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "time"] }
 bytes = "1"
 gtk = "0.15"
 webkit2gtk = "0.18"
 glib = "0.15"
 gio = "0.15"
+print-manager = { version = "0.1.0", path = "../print-manager" }
+extension-host = { version = "0.1.0", path = "../extension-host" }
+extension-api = { version = "0.1.0", path = "../extension-api" }
 
